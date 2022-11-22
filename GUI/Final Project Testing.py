@@ -3,16 +3,19 @@
 from tkinter import*
 import sqlite3
 from turtle import window_width
+import tkinter as tk
 
 
 ##Global
 global InputScreen
 global SelectTab
 global BookingsView
+global BookingsDelete
 global DBView_Table2022
 global DBView_Table2023
 global DBView_Table2024
-global DBView_Table2025    
+global DBView_Table2025   
+
 
 
 def Login():
@@ -127,7 +130,6 @@ def InputScreen():
     
         def Submit():
             global Booking_Window
-
 
             print(First_Name.get(),Last_Name.get(),Address.get(),Mobile.get(),Day_Entry.get(),Service_Entry.get(),Month_Entry.get(),Year_Entry.get())
            
@@ -258,11 +260,7 @@ def InputScreen():
         Year = OptionMenu(Bookingwindow,Year_Entry,*Y_Options)
         Year.configure(width=30,bg="#282828",fg="white")
         Year.pack()   
-
         
-        
-
-
         Book = Button(Bookingwindow,text="Book",command=Submit)
         Book.pack(pady=2)
 
@@ -285,6 +283,10 @@ def SelectTab():
     def BookingCreate():
         DestroySelect()
         InputScreen()
+
+    def BookingDeletion():
+        DestroySelect()
+        BookingsDelete()
 
     def Logout():
         DestroySelect()
@@ -309,6 +311,11 @@ def SelectTab():
         BookingButton = Button(selectionwindow,image=DataInsertion,command=BookingCreate)
         BookingButton.pack(pady=10)
 
+        # DeleteBooking = PhotoImage(file="")
+        DeleteBookingBtn = Button(selectionwindow,text="Delete a Booking",command=BookingDeletion)
+        DeleteBookingBtn.pack()
+
+
         LogoutButton = PhotoImage(file="GUI\LogoutButton.png")
         button2 = Button(selectionwindow,image = LogoutButton,command = Logout)
         button2.pack(pady=10)
@@ -317,16 +324,19 @@ def SelectTab():
     Select_Tab()
 
 def DBView_Table2022():
+    global Database_Query2022
     DBView_Window1 = Tk()
-    DBView_Window1.title("Database View")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(DBView_Window1, image=Login)
+    label.image = Login
+    label.pack(pady=1)
+    DBView_Window1.title("Database 2022 View")
     width= DBView_Window1.winfo_screenwidth()               
     height= DBView_Window1.winfo_screenheight()               
     DBView_Window1.geometry("%dx%d" % (width, height))
     DBView_Window1["bg"] = "#282828"
 
-    SGW = PhotoImage(file ="GUI\LoginGUI.png")
-    label = Label(DBView_Window1,image=SGW)
-    label.pack(pady=10)
+    
 
     def DB_View1Destroy():
         DBView_Window1.destroy()
@@ -353,23 +363,73 @@ def DBView_Table2022():
             conn.commit
             conn.close
 
+            def DBView_TableMonth22():
+                conn = sqlite3.connect("SGW_Database.db")
+                c = conn.cursor()
+                Select = ("SELECT oid,* FROM bookings WHERE Year='2022'AND Month=?")
+                Month_EntryDB = (Month_Entry.get(),)
+                c.execute(Select,Month_EntryDB) 
+                    
+                MainRecords1 = c.fetchall()
+                Print_MainRecords1 =''
+
+                for record in MainRecords1:
+                    Print_MainRecords1 += str(record) + "\n"
+                
+                
+                    MainRecordsshow1 = Label(DBView_Window1,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+                    MainRecordsshow1.pack()
+
+                    conn.commit
+                    conn.close
+
+            M_Options = [
+            "Jan",
+            "Feb",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+            ]
+            
+            Month_Entry = StringVar(DBView_Window1)
+            Month_Entry.set(M_Options[0])
+
+            Month22 = OptionMenu(DBView_Window1,Month_Entry,*M_Options,)
+            Month22.configure(width=30,bg="#282828",fg="white")
+            Month22.pack()
+
+            MonthSelect = Button(DBView_Window1,text="View Months bookings",command=DBView_TableMonth22)
+            MonthSelect.pack()
+
             BackBtn = Button(DBView_Window1,text="Back",command = DBViewBack1)
             BackBtn.pack()
-            DBView_Window1.mainloop
 
+            DBView_Window1.mainloop
+    DBView_Window1.mainloop
     Database_Query2022()
 
 def DBView_Table2023():
+    global Database_Query2023
     DBView_Window2 = Tk()
-    DBView_Window2.title("Database View")
+
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(DBView_Window2, image=Login)
+    label.image = Login
+    label.pack(pady=10)
+
+    DBView_Window2.title("Database 2023 View")
     width= DBView_Window2.winfo_screenwidth()               
     height= DBView_Window2.winfo_screenheight()               
     DBView_Window2.geometry("%dx%d" % (width, height))
     DBView_Window2["bg"] = "#282828"
 
-    SGW = PhotoImage(file ="GUI\LoginGUI.png")
-    label = Label(DBView_Window2,image=SGW)
-    label.pack(pady=10)
 
     def DB_View2Destroy():
         DBView_Window2.destroy()
@@ -396,6 +456,51 @@ def DBView_Table2023():
             conn.commit
             conn.close
 
+            def DBView_TableMonth23():
+                conn = sqlite3.connect("SGW_Database.db")
+                c = conn.cursor()
+                Select = ("SELECT oid,* FROM bookings WHERE Year='2023'AND Month=?")
+                Month_EntryDB = (Month_Entry.get(),)
+                c.execute(Select,Month_EntryDB) 
+                    
+                MainRecords1 = c.fetchall()
+                Print_MainRecords1 =''
+
+                for record in MainRecords1:
+                    Print_MainRecords1 += str(record) + "\n"
+                
+                
+                    MainRecordsshow1 = Label(DBView_Window2,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+                    MainRecordsshow1.pack()
+
+                    conn.commit
+                    conn.close
+
+            M_Options = [
+            "Jan",
+            "Feb",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+            ]
+            
+            Month_Entry = StringVar(DBView_Window2)
+            Month_Entry.set(M_Options[0])
+
+            Month22 = OptionMenu(DBView_Window2,Month_Entry,*M_Options,)
+            Month22.configure(width=30,bg="#282828",fg="white")
+            Month22.pack()
+
+            MonthSelect = Button(DBView_Window2,text="View Months bookings",command=DBView_TableMonth23)
+            MonthSelect.pack()
+
             BackBtn = Button(DBView_Window2,text="Back",command = DBViewBack2)
             BackBtn.pack()
 
@@ -404,17 +509,20 @@ def DBView_Table2023():
     Database_Query2023()
 
 def DBView_Table2024():
-    global DBView_Window
+    global Database_Query2024
     DBView_Window3 = Tk()
-    DBView_Window3.title("Database View")
+
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(DBView_Window3, image=Login)
+    label.image = Login
+    label.pack(pady=10)
+
+    DBView_Window3.title("Database 2024 View")
     width= DBView_Window3.winfo_screenwidth()               
     height= DBView_Window3.winfo_screenheight()               
     DBView_Window3.geometry("%dx%d" % (width, height))
     DBView_Window3["bg"] = "#282828"
 
-    SGW = PhotoImage(file ="GUI\LoginGUI.png")
-    label = Label(DBView_Window3,image=SGW)
-    label.pack(pady=10)
 
     def DB_View3Destroy():
         DBView_Window3.destroy()
@@ -442,6 +550,51 @@ def DBView_Table2024():
             conn.commit
             conn.close
 
+            def DBView_TableMonth24():
+                conn = sqlite3.connect("SGW_Database.db")
+                c = conn.cursor()
+                Select = ("SELECT oid,* FROM bookings WHERE Year='2024'AND Month=?")
+                Month_EntryDB = (Month_Entry.get(),)
+                c.execute(Select,Month_EntryDB) 
+                    
+                MainRecords1 = c.fetchall()
+                Print_MainRecords1 =''
+
+                for record in MainRecords1:
+                    Print_MainRecords1 += str(record) + "\n"
+                
+                
+                    MainRecordsshow1 = Label(DBView_Window3,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+                    MainRecordsshow1.pack()
+
+                    conn.commit
+                    conn.close
+
+            M_Options = [
+            "Jan",
+            "Feb",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+            ]
+            
+            Month_Entry = StringVar(DBView_Window3)
+            Month_Entry.set(M_Options[0])
+
+            Month22 = OptionMenu(DBView_Window3,Month_Entry,*M_Options,)
+            Month22.configure(width=30,bg="#282828",fg="white")
+            Month22.pack()
+
+            MonthSelect = Button(DBView_Window3,text="View Months bookings",command=DBView_TableMonth24)
+            MonthSelect.pack()
+
             BackBtn = Button(DBView_Window3,text="Back",command = DBViewBack3)
             BackBtn.pack()
 
@@ -450,16 +603,20 @@ def DBView_Table2024():
     Database_Query2024()
 
 def DBView_Table2025():
+    global Database_Query2025
     DBView_Window4 = Tk()
-    DBView_Window4.title("Database View")
+
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(DBView_Window4, image=Login)
+    label.image = Login
+    label.pack(pady=10)
+
+    DBView_Window4.title("Database 2025 View")
     width= DBView_Window4.winfo_screenwidth()               
     height= DBView_Window4.winfo_screenheight()               
     DBView_Window4.geometry("%dx%d" % (width, height))
     DBView_Window4["bg"] = "#282828"
 
-    SGW = PhotoImage(file ="GUI\LoginGUI.png")
-    label = Label(DBView_Window4,image=SGW)
-    label.pack(pady=10)
 
     def DB_View4Destroy():
         DBView_Window4.destroy()
@@ -485,14 +642,123 @@ def DBView_Table2025():
 
             conn.commit
             conn.close
+            
+            def DBView_TableMonth25():
+                conn = sqlite3.connect("SGW_Database.db")
+                c = conn.cursor()
+                Select = ("SELECT oid,* FROM bookings WHERE Year='2025'AND Month=?")
+                Month_EntryDB = (Month_Entry.get(),)
+                c.execute(Select,Month_EntryDB) 
+                    
+                MainRecords1 = c.fetchall()
+                Print_MainRecords1 =''
+
+                for record in MainRecords1:
+                    Print_MainRecords1 += str(record) + "\n"
+                
+                    MainRecordsshow1 = Label(DBView_Window4,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+                    MainRecordsshow1.pack()
+
+                    conn.commit
+                    conn.close
+
+            M_Options = [
+            "Jan",
+            "Feb",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+            ]
+            
+            Month_Entry = StringVar(DBView_Window4)
+            Month_Entry.set(M_Options[0])
+
+            Month22 = OptionMenu(DBView_Window4,Month_Entry,*M_Options,)
+            Month22.configure(width=30,bg="#282828",fg="white")
+            Month22.pack()
+
+            MonthSelect = Button(DBView_Window4,text="View Months bookings",command=DBView_TableMonth25)
+            MonthSelect.pack()
 
             BackBtn = Button(DBView_Window4,text="Back",command = DBViewBack4)
             BackBtn.pack()
             DBView_Window4.mainloop
+            
     Database_Query2025()
+
+def BookingsDelete():
+    BookingDeleteWindow = Tk()
+
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(BookingDeleteWindow, image=Login)
+    label.image = Login
+    label.pack(pady=1)
+
+    def BookingsDelete():
+        BookingDeleteWindow.destroy()
+    
+    def Back2Select():
+        BookingsDelete()
+        SelectTab()
+
+    def BookingsDeleteView():
+        width= BookingDeleteWindow.winfo_screenwidth()               
+        height= BookingDeleteWindow.winfo_screenheight()               
+        BookingDeleteWindow.geometry("%dx%d" % (width, height))
+        BookingDeleteWindow.title("SGW:Delete a Booking")
+        BookingDeleteWindow["bg"] = '#282828'
+
+        def Database_Whole():
+            conn = sqlite3.connect("SGW_Database.db")
+            c = conn.cursor()
+            c.execute("SELECT oid,* FROM bookings")
+            
+            MainRecords = c.fetchall()
+            Print_MainRecords = ''
+
+            for record in MainRecords:
+                Print_MainRecords += str(record) + "\n"
+    
+            MainRecordsshow = Label(BookingDeleteWindow,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+            MainRecordsshow.pack()
+
+            conn.commit
+
+            conn.close
+
+        Database_Whole()
+
+        def Delete():
+            conn = sqlite3.connect("SGW_Database.db",isolation_level=None)
+            c = conn.cursor()
+
+            c.execute("DELETE FROM bookings WHERE oid = " + ID_Entry.get())
+    
+        ID_Entry = Entry(BookingDeleteWindow,bg="#282828",fg="white", width = 30)
+        ID_Entry.pack(pady=10)
+
+        DeleteBtn = Button(BookingDeleteWindow,text="Delete",command=Delete)
+        DeleteBtn.pack()
+
+        BackBtn = Button(BookingDeleteWindow,text="Back",command = Back2Select)
+        BackBtn.pack()
+        
+    BookingsDeleteView()
 
 def BookingsView():
     bookingswindow = Tk()
+
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    label = Label(bookingswindow, image=Login)
+    label.image = Login
+    label.pack(pady=1)
 
     def BookingsViewDestroy():
         bookingswindow.destroy()
@@ -510,9 +776,6 @@ def BookingsView():
         bookingswindow.title("SGW: Bookings View")
         bookingswindow["bg"] = '#282828'
 
-        SGW = PhotoImage(file ="GUI\LoginGUI.png")
-        label = Label(bookingswindow,image=SGW)
-        label.pack(pady=10)
 
         def Booking_Destroy():
             bookingswindow.destroy()
@@ -530,7 +793,7 @@ def BookingsView():
             DBView_Table2024()
 
         def DBView25():
-            Booking_Destroy
+            Booking_Destroy()
             DBView_Table2025()               
 
         # def Database_Query2022():
@@ -610,16 +873,16 @@ def BookingsView():
         # Database_Query2025()
 
         ViewBooking2022 = Button(bookingswindow,text="View Bookings from 2022",command =DBView22)
-        ViewBooking2022.place(x=30,y=30)
+        ViewBooking2022.pack()
 
         ViewBooking2023 = Button(bookingswindow,text="View Bookings from 2023",command=DBView23)
-        ViewBooking2023.place(x=30,y=70)
+        ViewBooking2023.pack()
 
         ViewBooking2024 = Button(bookingswindow,text="View Bookings from 2024",command=DBView24)
-        ViewBooking2024.place(x=30,y=110)
+        ViewBooking2024.pack()
 
-        ViewBooking2025 = Button(bookingswindow,text="View Bookings from 2024",command=DBView25)
-        ViewBooking2025.place(x=30,y=150)
+        ViewBooking2025 = Button(bookingswindow,text="View Bookings from 2025",command=DBView25)
+        ViewBooking2025.pack()
 
         BackBtn = Button(bookingswindow,text="Back",command = Back2Select)
         BackBtn.pack()
