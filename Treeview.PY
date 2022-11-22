@@ -1010,23 +1010,79 @@ def BookingsDelete():
         BookingDeleteWindow.title("SGW:Delete a Booking")
         BookingDeleteWindow["bg"] = '#282828'
 
-        def Database_Whole():
-            conn = sqlite3.connect("SGW_Database.db")
-            c = conn.cursor()
-            c.execute("SELECT oid,* FROM bookings")
-            
-            MainRecords = c.fetchall()
-            Print_MainRecords = ''
+    def Database_Whole():
+        Style = ttk.Style()
+        ### Theme Choice
+        Style.theme_use("default")
 
-            for record in MainRecords:
-                Print_MainRecords += str(record) + "\n"
-    
-            MainRecordsshow = Label(BookingDeleteWindow,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-            MainRecordsshow.pack()
+        Style.configure("Treeview",
+            background= "#282828",
+            foreground="White",
+            rowheight=15,
+            fieldbackground="#282828") 
+        
+        Style.map('Treeview',
+            background=[('selected','red')])
+           
+        Table_All = Frame(BookingDeleteWindow)
+        Table_All.pack()
 
-            conn.commit
+        #Treeview Scroll
+        
+        Table_AllScroll = Scrollbar(Table_All)
+        Table_AllScroll.pack(side=RIGHT, fill=Y)
 
-            conn.close
+        MYTable_All = ttk.Treeview(Table_All, yscrollcommand=Table_AllScroll.set)
+
+        #Config Scrollbar
+        Table_AllScroll.config(command=MYTable_All.yview)
+
+        #Making Columns
+        MYTable_All['columns']=('ID','Client_FirstName','Client_Surname','Client_Postcode','Client_Mobile','Service','Day','Month','Year')
+
+        MYTable_All.column("#0",width=0,stretch=NO)
+        MYTable_All.column("ID",anchor=CENTER,width=120)
+        MYTable_All.column("Client_FirstName",anchor=W, width=120,minwidth=40)
+        MYTable_All.column("Client_Surname",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Postcode",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Mobile",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Service",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Day",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Month",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Year",anchor=W,width=120,minwidth=40)
+
+        MYTable_All.heading('#0',text='',anchor=W)
+        MYTable_All.heading("ID",text="Booking ID",anchor=CENTER)
+        MYTable_All.heading("Client_FirstName",text="Clients Name",anchor=W)
+        MYTable_All.heading("Client_Surname",text="Clients Surname",anchor=W)
+        MYTable_All.heading("Client_Postcode",text="Postcode",anchor=W)
+        MYTable_All.heading("Client_Mobile",text="Mobile",anchor=W)
+        MYTable_All.heading("Service",text="Service",anchor=W)
+        MYTable_All.heading("Day",text="Day",anchor=W)
+        MYTable_All.heading("Month",text="Month",anchor=W)
+        MYTable_All.heading("Year",text="Year",anchor=W)
+
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
+
+        c.execute("SELECT rowid,* FROM bookings WHERE Year ='2025'")
+        records = c.fetchall()
+
+        global count
+        count = 0
+
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
+
+        conn.commit
+        conn.close
+
+        BackBtn = Button(BookingDeleteWindow,text="Back",command = BookingDeleteWindow)
+        BackBtn.pack()
+
+        BookingDeleteWindow.mainloop
 
         Database_Whole()
 
