@@ -71,7 +71,7 @@ def Login():
         windowLogin.title("SGQ - Calendar Login")
         windowLogin["bg"] = "#282828"
     
-        Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+        Login = PhotoImage(file = "GUI\LoginGUI.png")
         label = Label(windowLogin, image=Login)
         label.pack(pady=1)
 
@@ -80,11 +80,11 @@ def Login():
         Username.pack(pady=1)
         Password.pack(pady=1)
 
-        Loginbutton = PhotoImage(file ="C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\loginbutton.png")
+        Loginbutton = PhotoImage(file ="GUI\loginbutton.png")
         Button1 = Button(windowLogin,image = Loginbutton,command =lambda: Authentication(Username,Password))
         Button1.pack(pady=1)
 
-        CancelButton = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\Cancel.png")
+        CancelButton = PhotoImage(file = "GUI\Cancel.png")
         ButtonC = Button(windowLogin, image = CancelButton,command=lambda: CancelPress(Username,Password))  
         ButtonC.pack(pady=1)
         windowLogin.mainloop()
@@ -234,7 +234,7 @@ def InputScreen():
         Year_Entry.set(Y_Options[0])
 
     
-        Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+        Login = PhotoImage(file = "GUI\LoginGUI.png")
         label = Label(Bookingwindow, image=Login)
         label.image = Login
         label.pack(pady=1)
@@ -299,15 +299,15 @@ def SelectTab():
         selectionwindow.title("SGW: Selection Tab")
         selectionwindow["bg"] = '#282828'
 
-        SGW = PhotoImage(file ="C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+        SGW = PhotoImage(file ="GUI\LoginGUI.png")
         label = Label(selectionwindow,image=SGW)
         label.pack(pady=10)
         
-        ViewBookings = PhotoImage(file ="C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\ViewBooking.drawio.png")
+        ViewBookings = PhotoImage(file ="GUI\ViewBooking.drawio.png")
         button1 = Button(selectionwindow,image = ViewBookings,command = Bookings)
         button1.pack(pady=10)
 
-        DataInsertion = PhotoImage(file="C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\DataInsert.drawio.png")
+        DataInsertion = PhotoImage(file="GUI\DataInsert.drawio.png")
         BookingButton = Button(selectionwindow,image=DataInsertion,command=BookingCreate)
         BookingButton.pack(pady=10)
 
@@ -316,7 +316,7 @@ def SelectTab():
         DeleteBookingBtn.pack()
 
 
-        LogoutButton = PhotoImage(file="C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LogoutButton.png")
+        LogoutButton = PhotoImage(file="GUI\LogoutButton.png")
         button2 = Button(selectionwindow,image = LogoutButton,command = Logout)
         button2.pack(pady=10)
 
@@ -326,7 +326,7 @@ def SelectTab():
 def DBView_Table2022():
     global Database_Query2022
     DBView_Window1 = Tk()
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window1, image=Login)
     label.image = Login
     label.pack(pady=1)
@@ -419,7 +419,7 @@ def DBView_Table2023():
     global Database_Query2023
     DBView_Window2 = Tk()
 
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window2, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -512,7 +512,7 @@ def DBView_Table2024():
     global Database_Query2024
     DBView_Window3 = Tk()
 
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window3, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -606,7 +606,7 @@ def DBView_Table2025():
     global Database_Query2025
     DBView_Window4 = Tk()
 
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window4, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -696,7 +696,7 @@ def DBView_Table2025():
 def BookingsDelete():
     BookingDeleteWindow = Tk()
 
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(BookingDeleteWindow, image=Login)
     label.image = Login
     label.pack(pady=1)
@@ -755,7 +755,7 @@ def BookingsDelete():
 def BookingsView():
     bookingswindow = Tk()
 
-    Login = PhotoImage(file = "C:\Users\jackw\Documents\GitHub\Database.NEA\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(bookingswindow, image=Login)
     label.image = Login
     label.pack(pady=1)
