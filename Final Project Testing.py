@@ -689,8 +689,6 @@ def DBView_Table2025():
 
             BackBtn = Button(DBView_Window4,text="Back",command = DBViewBack4)
             BackBtn.pack()
-
-            print(Month_Entry.get())
             DBView_Window4.mainloop
             
     Database_Query2025()
@@ -889,10 +887,8 @@ def BookingsView():
         BackBtn = Button(bookingswindow,text="Back",command = Back2Select)
         BackBtn.pack()
 
-
-
         bookingswindow.mainloop()
 
     Booking_View()
-
+   
 Login()
