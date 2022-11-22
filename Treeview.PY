@@ -112,6 +112,8 @@ def InputScreen():
     conn.commit
     conn.close
 
+
+
     def Booking_Window():
         width= Bookingwindow.winfo_screenwidth()               
         height= Bookingwindow.winfo_screenheight()               
@@ -231,6 +233,7 @@ def InputScreen():
         Year_Entry = StringVar(Bookingwindow)
         Year_Entry.set(Y_Options[0])
 
+    
         Login = PhotoImage(file = "GUI\LoginGUI.png")
         label = Label(Bookingwindow, image=Login)
         label.image = Login
@@ -340,112 +343,7 @@ def DBView_TableAll():
         DB_View0Destroy()
         BookingsView()
  
-    def Table0(): 
-        ### ID Grab
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT oid FROM bookings WHERE oid ")
-    
-        MainID = c.fetchmany()      
-        Print_MainID = ''
-        for record in MainID:
-            Print_MainID += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-
-### First Name Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT First_Name FROM bookings")
-
-        MainFname = c.fetchmany()
-        Print_MainFname = ''
-
-        for record in MainFname:
-            Print_MainFname += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-
-### Surname Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Last_Name FROM bookings")
-
-        MainLname = c.fetchmany()
-        Print_MainLname = ''
-
-        for record in MainLname:
-            Print_MainLname += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-
-### Postcode Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Address FROM bookings")
-
-        MainAddress = c.fetchmany()
-        Print_MainAddress = ''
-
-        for record in MainAddress:
-            Print_MainAddress += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-
-### Mobile Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Mobile FROM bookings")
-
-        MainMobile = c.fetchmany()
-        Print_MainMobile = ''
-
-        for record in MainMobile:
-            Print_MainMobile += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"   
-
-### Service Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Service FROM bookings")
-
-        MainService = c.fetchmany()
-        Print_MainService = ''
-
-        for record in MainService:
-            Print_MainService += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-
-### Day Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Day FROM bookings")
-
-        MainDay = c.fetchmany()
-        Print_MainDay = ''
-
-        for record in MainDay:
-            Print_MainDay += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"   
-
-### Month Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Month FROM bookings")
-
-        MainMonth = c.fetchmany()
-        Print_MainMonth = ''
-
-        for record in MainMonth:
-            Print_MainMonth += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"  
-### Year Grab
-
-        conn = sqlite3.connect("SGW_Database.db")
-        c = conn.cursor()
-        c.execute("SELECT Year FROM bookings")
-
-        MainYear = c.fetchmany()
-        Print_MainYear = ''
-
-        for record in MainYear:
-            Print_MainYear += str(record).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'","") + "\n"
-           
+    def Table0():
         ### Styling Table
         Style = ttk.Style()
         ### Theme Choice
@@ -498,11 +396,19 @@ def DBView_TableAll():
         MYTable_All.heading("Month",text="Month",anchor=W)
         MYTable_All.heading("Year",text="Year",anchor=W)
 
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
 
-        MYTable_All.insert(parent='',index='end',iid=5,text="",values=(Print_MainID,Print_MainFname,Print_MainLname,Print_MainAddress,Print_MainMobile,Print_MainService,Print_MainDay,Print_MainMonth,Print_MainYear))
-            
+        c.execute("SELECT rowid,* FROM bookings")
+        records = c.fetchall()
 
-        MYTable_All.pack()
+        global count
+        count = 0
+
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
 
         conn.commit
         conn.close
@@ -513,28 +419,20 @@ def DBView_TableAll():
     Table0()
         
         # def Database_QueryALL():  ## Used Temporarily before table complete
-        
         # conn = sqlite3.connect("SGW_Database.db") 
         # c = conn.cursor()
-        # c.execute("SELECT oid,* FROM bookings")
-        
+        # c.execute("SELECT oid,* FROM bookings")  
         # MainRecords = c.fetchall()
         # Print_MainRecords = ''
-
         # for record in MainRecords:
-        #     Print_MainRecords += str(record) + "\n"
-            
-            
+        #     Print_MainRecords += str(record) + "\n"           
         # MainRecordsshow = Label(DBView_Window0,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
         # MainRecordsshow.pack()
-
         # conn.commit
         # conn.close
 
 def DBView_Table2022():
-    global Database_Query2022
     DBView_Window1 = Tk()
-
     Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window1, image=Login)
     label.image = Login
@@ -554,74 +452,130 @@ def DBView_Table2022():
         BookingsView()
 
     def Database_Query2022():
-            conn = sqlite3.connect("SGW_Database.db")
-            c = conn.cursor()
-            c.execute("SELECT oid,* FROM bookings WHERE Year='2022'")
-            
-            MainRecords = c.fetchall()
-            Print_MainRecords = ''
+        ### Styling Table
+        Style = ttk.Style()
+        ### Theme Choice
+        Style.theme_use("default")
 
-            for record in MainRecords:
-                Print_MainRecords += str(record) + "\n"
-                
-                
-            MainRecordsshow = Label(DBView_Window1,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-            MainRecordsshow.pack()
+        Style.configure("Treeview",
+            background= "#282828",
+            foreground="White",
+            rowheight=15,
+            fieldbackground="#282828") 
+        
+        Style.map('Treeview',
+            background=[('selected','red')])
+           
+        Table_All = Frame(DBView_Window1)
+        Table_All.pack()
 
-            conn.commit
-            conn.close
+        #Treeview Scroll
+        
+        Table_AllScroll = Scrollbar(Table_All)
+        Table_AllScroll.pack(side=RIGHT, fill=Y)
 
-            def DBView_TableMonth22():
-                conn = sqlite3.connect("SGW_Database.db")
-                c = conn.cursor()
-                Select = ("SELECT oid,* FROM bookings WHERE Year='2022'AND Month=?")
-                Month_EntryDB = (Month_Entry.get(),)
-                c.execute(Select,Month_EntryDB) 
-                    
-                MainRecords1 = c.fetchall()
-                Print_MainRecords1 =''
+        MYTable_All = ttk.Treeview(Table_All, yscrollcommand=Table_AllScroll.set)
 
-                for record in MainRecords1:
-                    Print_MainRecords1 += str(record) + "\n"
-                
-                
-                MainRecordsshow1 = Label(DBView_Window1,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-                MainRecordsshow1.pack()
+        #Config Scrollbar
+        Table_AllScroll.config(command=MYTable_All.yview)
 
-                conn.commit
-                conn.close
+        #Making Columns
+        MYTable_All['columns']=('ID','Client_FirstName','Client_Surname','Client_Postcode','Client_Mobile','Service','Day','Month','Year')
 
-            M_Options = [
-            "Jan",
-            "Feb",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-            ]
-            
-            Month_Entry = StringVar(DBView_Window1)
-            Month_Entry.set(M_Options[0])
+        MYTable_All.column("#0",width=0,stretch=NO)
+        MYTable_All.column("ID",anchor=CENTER,width=120)
+        MYTable_All.column("Client_FirstName",anchor=W, width=120,minwidth=40)
+        MYTable_All.column("Client_Surname",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Postcode",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Mobile",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Service",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Day",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Month",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Year",anchor=W,width=120,minwidth=40)
 
-            Month22 = OptionMenu(DBView_Window1,Month_Entry,*M_Options,)
-            Month22.configure(width=30,bg="#282828",fg="white")
-            Month22.pack()
+        MYTable_All.heading('#0',text='',anchor=W)
+        MYTable_All.heading("ID",text="Booking ID",anchor=CENTER)
+        MYTable_All.heading("Client_FirstName",text="Clients Name",anchor=W)
+        MYTable_All.heading("Client_Surname",text="Clients Surname",anchor=W)
+        MYTable_All.heading("Client_Postcode",text="Postcode",anchor=W)
+        MYTable_All.heading("Client_Mobile",text="Mobile",anchor=W)
+        MYTable_All.heading("Service",text="Service",anchor=W)
+        MYTable_All.heading("Day",text="Day",anchor=W)
+        MYTable_All.heading("Month",text="Month",anchor=W)
+        MYTable_All.heading("Year",text="Year",anchor=W)
 
-            MonthSelect = Button(DBView_Window1,text="View Months bookings",command=DBView_TableMonth22)
-            MonthSelect.pack()
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
 
-            BackBtn = Button(DBView_Window1,text="Back",command = DBViewBack1)
-            BackBtn.pack()
+        c.execute("SELECT rowid,* FROM bookings WHERE Year='2022'")
+        records = c.fetchall()
 
-            DBView_Window1.mainloop
-    DBView_Window1.mainloop
+        global count
+        count = 0
+
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
+
+        conn.commit
+        conn.close
+
+        BackBtn = Button(DBView_Window1,text="Back",command = DBViewBack1)
+        BackBtn.pack()
+        DBView_Window1.mainloop
     Database_Query2022()
+            
+    #         def DBView_TableMonth22():
+    #             conn = sqlite3.connect("SGW_Database.db")
+    #             c = conn.cursor()
+    #             Select = ("SELECT oid,* FROM bookings WHERE Year='2022'AND Month=?")
+    #             Month_EntryDB = (Month_Entry.get(),)
+    #             c.execute(Select,Month_EntryDB) 
+                    
+    #             MainRecords1 = c.fetchall()
+    #             Print_MainRecords1 =''
+
+    #             for record in MainRecords1:
+    #                 Print_MainRecords1 += str(record) + "\n"
+                
+                
+    #             MainRecordsshow1 = Label(DBView_Window1,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+    #             MainRecordsshow1.pack()
+
+    #             conn.commit
+    #             conn.close
+
+    #         M_Options = [
+    #         "Jan",
+    #         "Feb",
+    #         "March",
+    #         "April",
+    #         "May",
+    #         "June",
+    #         "July",
+    #         "August",
+    #         "September",
+    #         "October",
+    #         "November",
+    #         "December"
+    #         ]
+            
+    #         Month_Entry = StringVar(DBView_Window1)
+    #         Month_Entry.set(M_Options[0])
+
+    #         Month22 = OptionMenu(DBView_Window1,Month_Entry,*M_Options,)
+    #         Month22.configure(width=30,bg="#282828",fg="white")
+    #         Month22.pack()
+
+    #         MonthSelect = Button(DBView_Window1,text="View Months bookings",command=DBView_TableMonth22)
+    #         MonthSelect.pack()
+
+    #         BackBtn = Button(DBView_Window1,text="Back",command = DBViewBack1)
+    #         BackBtn.pack()
+
+    #         DBView_Window1.mainloop
+    # Database_Query2022()
 
 def DBView_Table2023():
     global Database_Query2023
@@ -647,74 +601,131 @@ def DBView_Table2023():
         BookingsView()
 
     def Database_Query2023():
-            conn = sqlite3.connect("SGW_Database.db")
-            c = conn.cursor()
-            c.execute("SELECT oid,* FROM bookings WHERE Year='2023'")
-            
-            MainRecords = c.fetchall()
-            Print_MainRecords = ''
+                    ### Styling Table
+        Style = ttk.Style()
+        ### Theme Choice
+        Style.theme_use("default")
 
-            for record in MainRecords:
-                Print_MainRecords += str(record) + "\n"
-                
-                
-            MainRecordsshow = Label(DBView_Window2,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-            MainRecordsshow.pack()
+        Style.configure("Treeview",
+            background= "#282828",
+            foreground="White",
+            rowheight=15,
+            fieldbackground="#282828") 
+        
+        Style.map('Treeview',
+            background=[('selected','red')])
+           
+        Table_All = Frame(DBView_Window2)
+        Table_All.pack()
 
-            conn.commit
-            conn.close
+        #Treeview Scroll
+        
+        Table_AllScroll = Scrollbar(Table_All)
+        Table_AllScroll.pack(side=RIGHT, fill=Y)
 
-            def DBView_TableMonth23():
-                conn = sqlite3.connect("SGW_Database.db")
-                c = conn.cursor()
-                Select = ("SELECT oid,* FROM bookings WHERE Year='2023'AND Month=?")
-                Month_EntryDB = (Month_Entry.get(),)
-                c.execute(Select,Month_EntryDB) 
-                    
-                MainRecords1 = c.fetchall()
-                Print_MainRecords1 =''
+        MYTable_All = ttk.Treeview(Table_All, yscrollcommand=Table_AllScroll.set)
 
-                for record in MainRecords1:
-                    Print_MainRecords1 += str(record) + "\n"
-                
-                
-                MainRecordsshow1 = Label(DBView_Window2,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-                MainRecordsshow1.pack()
+        #Config Scrollbar
+        Table_AllScroll.config(command=MYTable_All.yview)
 
-                conn.commit
-                conn.close
+        #Making Columns
+        MYTable_All['columns']=('ID','Client_FirstName','Client_Surname','Client_Postcode','Client_Mobile','Service','Day','Month','Year')
 
-            M_Options = [
-            "Jan",
-            "Feb",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-            ]
-            
-            Month_Entry = StringVar(DBView_Window2)
-            Month_Entry.set(M_Options[0])
+        MYTable_All.column("#0",width=0,stretch=NO)
+        MYTable_All.column("ID",anchor=CENTER,width=120)
+        MYTable_All.column("Client_FirstName",anchor=W, width=120,minwidth=40)
+        MYTable_All.column("Client_Surname",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Postcode",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Mobile",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Service",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Day",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Month",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Year",anchor=W,width=120,minwidth=40)
 
-            Month22 = OptionMenu(DBView_Window2,Month_Entry,*M_Options,)
-            Month22.configure(width=30,bg="#282828",fg="white")
-            Month22.pack()
+        MYTable_All.heading('#0',text='',anchor=W)
+        MYTable_All.heading("ID",text="Booking ID",anchor=CENTER)
+        MYTable_All.heading("Client_FirstName",text="Clients Name",anchor=W)
+        MYTable_All.heading("Client_Surname",text="Clients Surname",anchor=W)
+        MYTable_All.heading("Client_Postcode",text="Postcode",anchor=W)
+        MYTable_All.heading("Client_Mobile",text="Mobile",anchor=W)
+        MYTable_All.heading("Service",text="Service",anchor=W)
+        MYTable_All.heading("Day",text="Day",anchor=W)
+        MYTable_All.heading("Month",text="Month",anchor=W)
+        MYTable_All.heading("Year",text="Year",anchor=W)
 
-            MonthSelect = Button(DBView_Window2,text="View Months bookings",command=DBView_TableMonth23)
-            MonthSelect.pack()
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
 
-            BackBtn = Button(DBView_Window2,text="Back",command = DBViewBack2)
-            BackBtn.pack()
+        c.execute("SELECT rowid,* FROM bookings WHERE Year ='2023'")
+        records = c.fetchall()
 
-            DBView_Window2.mainloop
+        global count
+        count = 0
 
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
+
+        conn.commit
+        conn.close
+
+        BackBtn = Button(DBView_Window2,text="Back",command = DBViewBack2)
+        BackBtn.pack()
+
+        DBView_Window2.mainloop
     Database_Query2023()
+
+            # def DBView_TableMonth23():
+            #     conn = sqlite3.connect("SGW_Database.db")
+            #     c = conn.cursor()
+            #     Select = ("SELECT oid,* FROM bookings WHERE Year='2023'AND Month=?")
+            #     Month_EntryDB = (Month_Entry.get(),)
+            #     c.execute(Select,Month_EntryDB) 
+                    
+            #     MainRecords1 = c.fetchall()
+            #     Print_MainRecords1 =''
+
+            #     for record in MainRecords1:
+            #         Print_MainRecords1 += str(record) + "\n"
+                
+                
+            #     MainRecordsshow1 = Label(DBView_Window2,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
+            #     MainRecordsshow1.pack()
+
+            #     conn.commit
+            #     conn.close
+
+            # M_Options = [
+            # "Jan",
+            # "Feb",
+            # "March",
+            # "April",
+            # "May",
+            # "June",
+            # "July",
+            # "August",
+            # "September",
+            # "October",
+            # "November",
+            # "December"
+            # ]
+            
+            # Month_Entry = StringVar(DBView_Window2)
+            # Month_Entry.set(M_Options[0])
+
+            # Month22 = OptionMenu(DBView_Window2,Month_Entry,*M_Options,)
+            # Month22.configure(width=30,bg="#282828",fg="white")
+            # Month22.pack()
+
+            # MonthSelect = Button(DBView_Window2,text="View Months bookings",command=DBView_TableMonth23)
+            # MonthSelect.pack()
+
+            # BackBtn = Button(DBView_Window2,text="Back",command = DBViewBack2)
+            # BackBtn.pack()
+
+            # DBView_Window2.mainloop
+
 
 def DBView_Table2024():
     global Database_Query2024
@@ -740,75 +751,112 @@ def DBView_Table2024():
         BookingsView()
 
     def Database_Query2024():
-            global DBView_Window
-            conn = sqlite3.connect("SGW_Database.db")
-            c = conn.cursor()
-            c.execute("SELECT oid,* FROM bookings WHERE Year='2024'")
-            
-            MainRecords = c.fetchall()
-            Print_MainRecords = ''
+        
+        Style = ttk.Style()
+        ### Theme Choice
+        Style.theme_use("default")
 
-            for record in MainRecords:
-                Print_MainRecords += str(record) + "\n"
-                
-                
-            MainRecordsshow = Label(DBView_Window3,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-            MainRecordsshow.pack()
+        Style.configure("Treeview",
+            background= "#282828",
+            foreground="White",
+            rowheight=15,
+            fieldbackground="#282828") 
+        
+        Style.map('Treeview',
+            background=[('selected','red')])
+           
+        Table_All = Frame(DBView_Window3)
+        Table_All.pack()
 
-            conn.commit
-            conn.close
+        #Treeview Scroll
+        
+        Table_AllScroll = Scrollbar(Table_All)
+        Table_AllScroll.pack(side=RIGHT, fill=Y)
 
-            def DBView_TableMonth24():
-                conn = sqlite3.connect("SGW_Database.db")
-                c = conn.cursor()
-                Select = ("SELECT oid,* FROM bookings WHERE Year='2024'AND Month=?")
-                Month_EntryDB = (Month_Entry.get(),)
-                c.execute(Select,Month_EntryDB) 
-                    
-                MainRecords1 = c.fetchall()
-                Print_MainRecords1 =''
+        MYTable_All = ttk.Treeview(Table_All, yscrollcommand=Table_AllScroll.set)
 
-                for record in MainRecords1:
-                    Print_MainRecords1 += str(record) + "\n"
-                
-                
-                MainRecordsshow1 = Label(DBView_Window3,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-                MainRecordsshow1.pack()
+        #Config Scrollbar
+        Table_AllScroll.config(command=MYTable_All.yview)
 
-                conn.commit
-                conn.close
+        #Making Columns
+        MYTable_All['columns']=('ID','Client_FirstName','Client_Surname','Client_Postcode','Client_Mobile','Service','Day','Month','Year')
 
-            M_Options = [
-            "Jan",
-            "Feb",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-            ]
-            
-            Month_Entry = StringVar(DBView_Window3)
-            Month_Entry.set(M_Options[0])
+        MYTable_All.column("#0",width=0,stretch=NO)
+        MYTable_All.column("ID",anchor=CENTER,width=120)
+        MYTable_All.column("Client_FirstName",anchor=W, width=120,minwidth=40)
+        MYTable_All.column("Client_Surname",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Postcode",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Mobile",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Service",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Day",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Month",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Year",anchor=W,width=120,minwidth=40)
 
-            Month22 = OptionMenu(DBView_Window3,Month_Entry,*M_Options,)
-            Month22.configure(width=30,bg="#282828",fg="white")
-            Month22.pack()
+        MYTable_All.heading('#0',text='',anchor=W)
+        MYTable_All.heading("ID",text="Booking ID",anchor=CENTER)
+        MYTable_All.heading("Client_FirstName",text="Clients Name",anchor=W)
+        MYTable_All.heading("Client_Surname",text="Clients Surname",anchor=W)
+        MYTable_All.heading("Client_Postcode",text="Postcode",anchor=W)
+        MYTable_All.heading("Client_Mobile",text="Mobile",anchor=W)
+        MYTable_All.heading("Service",text="Service",anchor=W)
+        MYTable_All.heading("Day",text="Day",anchor=W)
+        MYTable_All.heading("Month",text="Month",anchor=W)
+        MYTable_All.heading("Year",text="Year",anchor=W)
 
-            MonthSelect = Button(DBView_Window3,text="View Months bookings",command=DBView_TableMonth24)
-            MonthSelect.pack()
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
 
-            BackBtn = Button(DBView_Window3,text="Back",command = DBViewBack3)
-            BackBtn.pack()
+        c.execute("SELECT rowid,* FROM bookings WHERE Year ='2024'")
+        records = c.fetchall()
 
-            DBView_Window3.mainloop
+        global count
+        count = 0
 
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
+
+        conn.commit
+        conn.close
+
+        BackBtn = Button(DBView_Window3,text="Back",command = DBViewBack3)
+        BackBtn.pack()
+
+        DBView_Window3.mainloop
+    
     Database_Query2024()
+
+            # M_Options = [
+            # "Jan",
+            # "Feb",
+            # "March",
+            # "April",
+            # "May",
+            # "June",
+            # "July",
+            # "August",
+            # "September",
+            # "October",
+            # "November",
+            # "December"
+            # ]
+            
+            # Month_Entry = StringVar(DBView_Window3)
+            # Month_Entry.set(M_Options[0])
+
+            # Month22 = OptionMenu(DBView_Window3,Month_Entry,*M_Options,)
+            # Month22.configure(width=30,bg="#282828",fg="white")
+            # Month22.pack()
+
+            # MonthSelect = Button(DBView_Window3,text="View Months bookings",command=DBView_TableMonth24)
+            # MonthSelect.pack()
+
+            # BackBtn = Button(DBView_Window3,text="Back",command = DBViewBack3)
+            # BackBtn.pack()
+
+            # DBView_Window3.mainloop
+
 
 def DBView_Table2025():
     global Database_Query2025
@@ -834,72 +882,111 @@ def DBView_Table2025():
         BookingsView()
 
     def Database_Query2025():
-            conn = sqlite3.connect("SGW_Database.db")
-            c = conn.cursor()
-            c.execute("SELECT oid,* FROM bookings WHERE Year='2025'")
-            
-            MainRecords = c.fetchall()
-            Print_MainRecords = ''
+        
+        Style = ttk.Style()
+        ### Theme Choice
+        Style.theme_use("default")
 
-            for record in MainRecords:
-                Print_MainRecords += str(record) + "\n"
-                
-                
-            MainRecordsshow = Label(DBView_Window4,text=(Print_MainRecords).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-            MainRecordsshow.pack()
+        Style.configure("Treeview",
+            background= "#282828",
+            foreground="White",
+            rowheight=15,
+            fieldbackground="#282828") 
+        
+        Style.map('Treeview',
+            background=[('selected','red')])
+           
+        Table_All = Frame(DBView_Window4)
+        Table_All.pack()
 
-            conn.commit
-            conn.close
-            
-            def DBView_TableMonth25():
-                conn = sqlite3.connect("SGW_Database.db")
-                c = conn.cursor()
-                Select = ("SELECT oid,* FROM bookings WHERE Year='2025'AND Month=?")
-                Month_EntryDB = (Month_Entry.get(),)
-                c.execute(Select,Month_EntryDB) 
-                    
-                MainRecords1 = c.fetchall()
-                Print_MainRecords1 =''
+        #Treeview Scroll
+        
+        Table_AllScroll = Scrollbar(Table_All)
+        Table_AllScroll.pack(side=RIGHT, fill=Y)
 
-                for record in MainRecords1:
-                    Print_MainRecords1 += str(record) + "\n"
-                
-                MainRecordsshow1 = Label(DBView_Window4,text=(Print_MainRecords1).replace('(','').replace(')','').replace(',','').replace('[','').replace(']','').replace("'",""), bg = "#282828",fg="white")
-                MainRecordsshow1.pack()
+        MYTable_All = ttk.Treeview(Table_All, yscrollcommand=Table_AllScroll.set)
 
-                conn.commit
-                conn.close
+        #Config Scrollbar
+        Table_AllScroll.config(command=MYTable_All.yview)
 
-            M_Options = [
-            "Jan",
-            "Feb",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-            ]
-            
-            Month_Entry = StringVar(DBView_Window4)
-            Month_Entry.set(M_Options[0])
+        #Making Columns
+        MYTable_All['columns']=('ID','Client_FirstName','Client_Surname','Client_Postcode','Client_Mobile','Service','Day','Month','Year')
 
-            Month22 = OptionMenu(DBView_Window4,Month_Entry,*M_Options,)
-            Month22.configure(width=30,bg="#282828",fg="white")
-            Month22.pack()
+        MYTable_All.column("#0",width=0,stretch=NO)
+        MYTable_All.column("ID",anchor=CENTER,width=120)
+        MYTable_All.column("Client_FirstName",anchor=W, width=120,minwidth=40)
+        MYTable_All.column("Client_Surname",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Postcode",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Client_Mobile",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Service",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Day",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Month",anchor=W,width=120,minwidth=40)
+        MYTable_All.column("Year",anchor=W,width=120,minwidth=40)
 
-            MonthSelect = Button(DBView_Window4,text="View Months bookings",command=DBView_TableMonth25)
-            MonthSelect.pack()
+        MYTable_All.heading('#0',text='',anchor=W)
+        MYTable_All.heading("ID",text="Booking ID",anchor=CENTER)
+        MYTable_All.heading("Client_FirstName",text="Clients Name",anchor=W)
+        MYTable_All.heading("Client_Surname",text="Clients Surname",anchor=W)
+        MYTable_All.heading("Client_Postcode",text="Postcode",anchor=W)
+        MYTable_All.heading("Client_Mobile",text="Mobile",anchor=W)
+        MYTable_All.heading("Service",text="Service",anchor=W)
+        MYTable_All.heading("Day",text="Day",anchor=W)
+        MYTable_All.heading("Month",text="Month",anchor=W)
+        MYTable_All.heading("Year",text="Year",anchor=W)
 
-            BackBtn = Button(DBView_Window4,text="Back",command = DBViewBack4)
-            BackBtn.pack()
-            DBView_Window4.mainloop
-            
+        conn = sqlite3.connect("SGW_Database.db")
+        c = conn.cursor()
+
+        c.execute("SELECT rowid,* FROM bookings WHERE Year ='2025'")
+        records = c.fetchall()
+
+        global count
+        count = 0
+
+        for record in records:
+            MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
+            MYTable_All.pack()
+            count += 1
+
+        conn.commit
+        conn.close
+
+        BackBtn = Button(DBView_Window4,text="Back",command = DBViewBack4)
+        BackBtn.pack()
+
+        DBView_Window4.mainloop
     Database_Query2025()
+
+            # M_Options = [
+            # "Jan",
+            # "Feb",
+            # "March",
+            # "April",
+            # "May",
+            # "June",
+            # "July",
+            # "August",
+            # "September",
+            # "October",
+            # "November",
+            # "December"
+            # ]
+            
+            # Month_Entry = StringVar(DBView_Window4)
+            # Month_Entry.set(M_Options[0])
+
+            # Month22 = OptionMenu(DBView_Window4,Month_Entry,*M_Options,)
+            # Month22.configure(width=30,bg="#282828",fg="white")
+            # Month22.pack()
+
+            # MonthSelect = Button(DBView_Window4,text="View Months bookings",command=DBView_TableMonth25)
+            # MonthSelect.pack()
+
+            # BackBtn = Button(DBView_Window4,text="Back",command = DBViewBack4)
+            # BackBtn.pack()
+            # DBView_Window4.mainloop
+            
+
 
 def BookingsDelete():
     BookingDeleteWindow = Tk()
@@ -1033,7 +1120,8 @@ def BookingsView():
         BackBtn.pack()
 
         bookingswindow.mainloop()
-        
+
     Booking_View()
    
 Login()
+
