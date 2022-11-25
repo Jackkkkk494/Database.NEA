@@ -5,13 +5,13 @@ import sqlite3
 from turtle import window_width
 import tkinter.ttk as ttk
 from tkinter import font
-
+from tkinter import messagebox
 ##Global
 global SelectTab
 global DBView
 global DBAdd
 global DBDelete
-
+global Login
 
 def Login():
     windowLogin = Tk()   
@@ -36,11 +36,13 @@ def Login():
                     print ("Welcome",Username.get(), Password.get())
                     Select()
                 elif result:
+                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")
                     print(Username.get(), Password.get(),"Wrong Username or Password")
                     Username["bg"] = "red"
                     Password["bg"] = "red"
 
                 else:
+                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")
                     print(Username.get(),Password.get(),"User not found")
                     Username["bg"] = "red"
                     Password["bg"] = "red"
@@ -51,8 +53,13 @@ def Login():
         Username["bg"] = "#282828"
         Password["bg"] = "#282828"
 
-
     def LoginTab():
+
+        def UsernameDel(e):
+            Username.delete(0, END)
+
+        def PasswordDel(e):
+            Password.delete(0, END)
     
         #windowLogin.geometry('800x600+0+0')
         width= windowLogin.winfo_screenwidth()               
@@ -60,13 +67,25 @@ def Login():
         windowLogin.geometry("%dx%d" % (width, height))
         windowLogin.title("SGQ - Calendar Login")
         windowLogin["bg"] = "#282828"
-    
-        Login = PhotoImage(file = r"N:\GUI\LoginGUI.png")
+
+        MainMenu = Menu(windowLogin)
+        windowLogin.config(menu=MainMenu)
+
+        Option_menu = Menu(MainMenu,tearoff=0)
+        MainMenu.add_cascade(label="Options",menu=Option_menu)
+        Option_menu.add_separator()
+        Option_menu.add_command(label="Exit",command=windowLogin.destroy)
+
+        Login = PhotoImage(file = "GUI\LoginGUI.png")
         label = Label(windowLogin, image=Login)
         label.pack(pady=10)
 
         Username = Entry(windowLogin,font=('MsSerif 14 bold'),bg="#282828",fg="white",justify=CENTER,highlightbackground="grey",highlightthickness=3,bd=0)
+        Username.insert(0,"Username")
         Password = Entry(windowLogin,font=('MsSerif 14 bold'),bg="#282828",fg="white",justify=CENTER,show = "*",highlightbackground="grey",highlightthickness=3,bd=0)
+        Password.insert(0,"Password")
+        Username.bind("<FocusIn>",UsernameDel)
+        Password.bind("<FocusIn>",PasswordDel)
         Username.pack(pady=3)
         Password.pack(pady=3)
 
@@ -77,7 +96,7 @@ def Login():
         ButtonC = Button(windowLogin,text="CANCEL",font=('MsSeif 14 bold'),highlightbackground="White",highlightthickness=5,bd=0,command=lambda: CancelPress(Username,Password))  
         ButtonC.configure(width=8)
         ButtonC.pack(pady=3)
-        windowLogin.mainloop()
+        windowLogin.mainloop() 
 
     LoginTab() 
 
@@ -109,20 +128,28 @@ def SelectTab():
         selectionwindow.title("SGW: Selection Tab")
         selectionwindow["bg"] = '#282828'
 
-        SGW = PhotoImage(file =r"N:\GUI\LoginGUI.png")
+        MainMenu = Menu(selectionwindow)
+        selectionwindow.config(menu=MainMenu)
+
+        Option_menu = Menu(MainMenu,tearoff=0)
+        MainMenu.add_cascade(label="Options",menu=Option_menu)
+        Option_menu.add_separator()
+        Option_menu.add_command(label="Exit",command=selectionwindow.destroy)
+
+        SGW = PhotoImage(file ="GUI\LoginGUI.png")
         label = Label(selectionwindow,image=SGW)
         label.pack(pady=3)
 
-        DBViewBtn = Button(selectionwindow,text="VIEW BOOKINGS",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,command = DB_Viewer)
+        DBViewBtn = Button(selectionwindow,text="VIEW BOOKINGS",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,width=20,command = DB_Viewer)
         DBViewBtn.pack(pady=3)
 
-        DBAViewBtn = Button(selectionwindow,text="EDIT BOOKING",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,command = DB_AddViewer)
+        DBAViewBtn = Button(selectionwindow,text="ADJUST BOOKINGS",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,width=20,command = DB_AddViewer)
         DBAViewBtn.pack(pady=3)
 
-        DBDViewBtn = Button(selectionwindow,text="DELETE BOOKING",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,command = DB_DeleteViewer)
+        DBDViewBtn = Button(selectionwindow,text="DELETE BOOKINGS",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,width=20,command = DB_DeleteViewer)
         DBDViewBtn.pack(pady=3)
         
-        LogoutBtn = Button(selectionwindow,text="LOGOUT",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,command = Logout)
+        LogoutBtn = Button(selectionwindow,text="LOGOUT",font=('MsSeif 14 bold'),highlightbackground="#282828",highlightthickness=5,bd=0,width=20,command = Logout)
         LogoutBtn.pack(pady=3)
 
         selectionwindow.mainloop()
@@ -156,7 +183,7 @@ def DBView():
         BookingsViewDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = r"N:\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBView_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -167,6 +194,54 @@ def DBView():
         height= DBView_Window.winfo_screenheight()               
         DBView_Window.geometry("%dx%d" % (width, height))
         DBView_Window["bg"] = "#282828"
+
+        def FindRecord():
+            Locate = search_entry.get()
+            search.destroy()
+            for record in MYTable_All.get_children():
+                MYTable_All.delete(record)
+
+            conn = sqlite3.connect('SGW_Database.db')
+            c = conn.cursor()
+
+            c.execute("SELECT rowid,*FROM bookings WHERE Last_Name=?",(Locate,))
+            records = c.fetchall()
+
+            global count
+            count = 0
+            for record in records:
+                if count % 2 == 0:
+                    MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]),tags=('evenrow',))
+                    MYTable_All.pack()
+                else:
+                    MYTable_All.insert(parent='',index='end',iid=count,text="",values=(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]),tags=('oddrow',))
+                count += 1 
+
+            conn.commit()
+            conn.close()
+
+        def Lookup():
+            global search_entry
+            global search
+            search = Toplevel(DBView_Window)
+            search.title("Search for a Booking")
+            search.geometry("400x200")
+            search_frame = LabelFrame(search,text="Search Client Surname")
+            search_frame.pack(padx=10,pady=10)
+            search_entry = Entry(search_frame,font=('MsSeif 14 bold'))
+            search_entry.pack(padx=10,pady=10)
+
+            search_Button = Button(search,text="Find Booking",font=('MsSeif 14 bold'),command=FindRecord)
+            search_Button.pack(padx=20,pady=20)
+        
+        Menu1 = Menu(DBView_Window)
+        DBView_Window.config(menu=Menu1)
+
+        search_menu = Menu(Menu1,tearoff=0)
+        Menu1.add_cascade(label="Options",menu=search_menu)
+        search_menu.add_command(label="Search Database",command=Lookup)
+        search_menu.add_separator()
+        search_menu.add_command(label="Exit",command=DBView_Window.destroy)
 
         #Styling Table
         Style = ttk.Style()
@@ -371,7 +446,7 @@ def DBAdd():
         ADDDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = r"N:\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBAdd_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -382,6 +457,14 @@ def DBAdd():
         height= DBAdd_Window.winfo_screenheight()               
         DBAdd_Window.geometry("%dx%d" % (width, height))
         DBAdd_Window["bg"] = "#282828"
+
+        MainMenu = Menu(DBAdd_Window)
+        DBAdd_Window.config(menu=MainMenu)
+
+        Option_menu = Menu(MainMenu,tearoff=0)
+        MainMenu.add_cascade(label="Options",menu=Option_menu)
+        Option_menu.add_separator()
+        Option_menu.add_command(label="Exit",command=DBAdd_Window.destroy)
 
         #Styling Table
         Style = ttk.Style()
@@ -565,13 +648,65 @@ def DBAdd():
 
             conn.commit
             conn.close
+
+            messagebox.showinfo("Added!", "Your Booking has been added in the database")
+        def UpdateRecord():
+            
+            
+
+            conn = sqlite3.connect('SGW_Database.db',isolation_level=None)
+            c=conn.cursor()
+            
+            EditWarn = messagebox.askyesno("Editing!","This will edit selected bookings from the database\nAre you sure?")
+            if EditWarn == 1:
+
+                c.execute("""UPDATE bookings SET 
+                    First_Name = :first_name, 
+                    Last_Name = :last_name,
+                    Address =:postcode,
+                    Mobile=:mobile,
+                    Service=:service,
+                    Day=:day,
+                    Month=:month,
+                    Year=:year
+
+                    WHERE oid = :oid""",
+                    {
+                        'oid':id_entry.get(),
+                        'first_name':firstn_entry.get(),
+                        'last_name':lastn_entry.get(),
+                        'postcode':postcode_entry.get(),
+                        'mobile':mobile_entry.get(),
+                        'service':service_entry.get(),
+                        'day':day_entry.get(),
+                        'month':month_entry.get(),
+                        'year':year_entry.get()        
+                    }
+                
+                
+                )
+
+                id_entry.delete(0,END)
+                firstn_entry.delete(0,END)
+                lastn_entry.delete(0,END)
+                postcode_entry.delete(0,END)
+                mobile_entry.delete(0,END)
+                service_entry.delete(0,END)
+                day_entry.delete(0,END)
+                month_entry.delete(0,END)
+                year_entry.delete(0,END)
+
+                messagebox.showinfo("Edited!", "Your Booking has been edited in the database")
+
+            else:
+                messagebox.showinfo("Cancelled!","Your Booking was not edited!")
             
 
 
         Clear_button = Button(data_frame,text='Clear Entry Boxes',command=clearentry)
         Clear_button.grid(row=2,column=0,padx=8,pady=10)
 
-        update_button = Button(data_frame,text='Edit Booking')
+        update_button = Button(data_frame,text='Edit Booking',command=UpdateRecord)
         update_button.grid(row=2,column=1,padx=8,pady=10)
 
         add_button = Button(data_frame,text='Add Booking',command=Submit)
@@ -613,7 +748,7 @@ def DBDelete():
         DeleteDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = r"N:\GUI\LoginGUI.png")
+    Login = PhotoImage(file = "GUI\LoginGUI.png")
     label = Label(DBDelete_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -624,6 +759,14 @@ def DBDelete():
         height= DBDelete_Window.winfo_screenheight()               
         DBDelete_Window.geometry("%dx%d" % (width, height))
         DBDelete_Window["bg"] = "#282828"
+
+        MainMenu = Menu(DBDelete_Window)
+        DBDelete_Window.config(menu=MainMenu)
+
+        Option_menu = Menu(MainMenu,tearoff=0)
+        MainMenu.add_cascade(label="Options",menu=Option_menu)
+        Option_menu.add_separator()
+        Option_menu.add_command(label="Exit",command=DBDelete_Window.destroy)
 
         #Styling Table
         Style = ttk.Style()
@@ -788,15 +931,79 @@ def DBDelete():
             month_entry.delete(0,END)
             year_entry.delete(0,END)
 
+        def DeleteRecord():
+            Dselect = MYTable_All.selection()[0]
+            Danger = messagebox.askyesno("Deleting!","This will remove selected bookings from the database\nAre you sure?")
+            if Danger == 1:    
+                MYTable_All.delete(Dselect)
+
+                conn = sqlite3.connect("SGW_Database.db",isolation_level=None)
+                c = conn.cursor()
+
+                c.execute("DELETE FROM bookings WHERE oid =" + id_entry.get())
+
+                conn.commit
+                conn.close
+
+            # Adds message box
+                messagebox.showinfo("Deleted", "Your Booking has been deleted from the database")
+
+
+                id_entry.delete(0,END)
+                firstn_entry.delete(0,END)
+                lastn_entry.delete(0,END)
+                postcode_entry.delete(0,END)
+                mobile_entry.delete(0,END)
+                service_entry.delete(0,END)
+                day_entry.delete(0,END)
+                month_entry.delete(0,END)
+                year_entry.delete(0,END)
+
+            else: 
+                messagebox.showinfo("Cancelled!","Booking Was not deleted")
+
+        def DeleteMany():
+            Dselect = MYTable_All.selection()
+            Danger = messagebox.askyesno("Deleting!","This will remove multiple selected bookings from the database\nAre you sure?")
+            if Danger == 1:
+                messagebox.showinfo("Deleted!","Multiple books deleted from database")
+                for record in Dselect:
+                    #Create IDlist
+                    id_delete = []
+                    id_delete.append(MYTable_All.item(record,'values')[0])
+                    conn = sqlite3.connect("SGW_Database.db",isolation_level=None)
+                    c = conn.cursor()
+
+                    c.executemany("DELETE FROM bookings WHERE oid =?",[(L,)for L in id_delete])
+
+                    conn.commit
+                    conn.close
+
+                    id_entry.delete(0,END)
+                    firstn_entry.delete(0,END)
+                    lastn_entry.delete(0,END)
+                    postcode_entry.delete(0,END)
+                    mobile_entry.delete(0,END)
+                    service_entry.delete(0,END)
+                    day_entry.delete(0,END)
+                    month_entry.delete(0,END)
+                    year_entry.delete(0,END) 
+
+                       
+
+                    MYTable_All.delete(record)
+
+            else:
+                messagebox.showinfo("Cancelled!","Bookings were not deleted from database")
 
         Clear_button = Button(data_frame,text='Clear Entry Boxes',command=clearentry)
         Clear_button.grid(row=2,column=0,padx=8,pady=10)
 
-        update_button = Button(data_frame,text='Edit Booking')
-        update_button.grid(row=2,column=1,padx=8,pady=10)
+        delete_button = Button(data_frame,text='Delete Selected Booking',command=DeleteRecord)
+        delete_button.grid(row=2,column=1,padx=8,pady=10)
 
-        delete_button = Button(data_frame,text='Delete a Booking')
-        delete_button.grid(row=2,column=2,padx=8,pady=10)
+        deletemany_button = Button(data_frame,text='Delete Multiple Selected Bookings',command=DeleteMany)
+        deletemany_button.grid(row=2,column=2,padx=8,pady=10)
 
         # binding treeview
         MYTable_All.bind("<ButtonRelease-1>",selectpress)
