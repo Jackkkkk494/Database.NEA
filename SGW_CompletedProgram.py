@@ -79,7 +79,7 @@ def Login():
         Option_menu.add_separator()
         Option_menu.add_command(label="Exit",command=windowLogin.destroy)
 
-        Login = PhotoImage(file = "GUI\LoginGUI.png")
+        Login = PhotoImage(file = "Logo.png")
         label = Label(windowLogin, image=Login)
         label.pack(pady=10)
 
@@ -139,7 +139,7 @@ def SelectTab():
         Option_menu.add_separator()
         Option_menu.add_command(label="Exit",command=selectionwindow.destroy)
 
-        SGW = PhotoImage(file ="GUI\LoginGUI.png")
+        SGW = PhotoImage(file ="Logo.png")
         label = Label(selectionwindow,image=SGW)
         label.pack(pady=3)
 
@@ -186,7 +186,7 @@ def DBView():
         BookingsViewDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    Login = PhotoImage(file = "Logo.png")
     label = Label(DBView_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -449,7 +449,7 @@ def DBAdd():
         ADDDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    Login = PhotoImage(file = "Logo.png")
     label = Label(DBAdd_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
@@ -751,7 +751,7 @@ def DBDelete():
         DeleteDestroy()
         SelectTab()
 
-    Login = PhotoImage(file = "GUI\LoginGUI.png")
+    Login = PhotoImage(file = "Logo.png")
     label = Label(DBDelete_Window, image=Login)
     label.image = Login
     label.pack(pady=10)
