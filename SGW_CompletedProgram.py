@@ -1,14 +1,12 @@
-## Name: Jack Wood
-## Document for Final Program
-
+## Name:
 ## Final Program
-## Jack Wood
 from tkinter import*
 import sqlite3
 from turtle import window_width
 import tkinter.ttk as ttk
 from tkinter import font
 from tkinter import messagebox
+
 ##Global
 global SelectTab
 global DBView
