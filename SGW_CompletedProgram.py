@@ -1,83 +1,82 @@
-## Name:
 ## Final Program
+## Jack Wood
 from tkinter import*
 import sqlite3
-from turtle import window_width
+from turtle import window_width     #Importing necessary libraries
 import tkinter.ttk as ttk
 from tkinter import font
 from tkinter import messagebox
-
 ##Global
-global SelectTab
+global SelectTab #Makes Functions GLobal 
 global DBView
 global DBAdd
 global DBDelete
 global Login
 
-def Login():
-    windowLogin = Tk()   
+def Login():                        #Defines Function Login used for login screen and functionality.
+    windowLogin = Tk()              #Creates window 'windowLogin' 
 
-    def DestroyLogin():
-        windowLogin.destroy()
+    def DestroyLogin():             #Function which when called destroys the Login window - so that when moving onto selection screen both windows are not present
+        windowLogin.destroy()       #Destorys 'windowlogin'
 
-    def Select():
-        DestroyLogin()
+    def Select():                   #Function which calls for 'window login to be closed and Selection window to be opened.
+        DestroyLogin()              
         SelectTab()
 
-    def Authentication(Username,Password):
-            result = 0
-            if Username and Password:
-                with open("passwords.txt") as f:
-                    for line in f:
-                        user, _ , pwd = line.strip().partition(";")
-                        result = ((user == Username.get()) + (pwd == Password.get())) or result
+    def Authentication(Username,Password):                  #Authentication function defined with variables Username and Password taken from entryboxes.
+            result = 0                                      
+            if Username and Password:   
+                with open("passwords.txt") as f:            #Opens text file which stores the username and password as f:
+                    for line in f:                          #Runs for loop for the number of lines in the text file
+                        user, _ , pwd = line.strip().partition(";")         #Removes the partition ; to seperate the username and password
+                        result = ((user == Username.get()) + (pwd == Password.get())) or result     #Checks if username and password match, if yes(1) then the answer will be 2 and so user is authorised.
                         if result == 2:
                             break
-                if result == 2:
-                    print ("Welcome",Username.get(), Password.get())
-                    Select()
-                elif result:
-                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")
-                    print(Username.get(), Password.get(),"Wrong Username or Password")
-                    Username["bg"] = "red"
+                if result == 2:                                         #If username and password match then user will be logged into the system.
+                    print ("Welcome",Username.get(), Password.get())    #Prints username and password with welcome to the shell - used whilst testing functionality.
+                    Select()                                            #Runs select(screen) function
+                elif result:                                            
+                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")         #If username and password arent correct then error message box is sent to the user.
+                    print(Username.get(), Password.get(),"Wrong Username or Password")                      #Prints the username and password entered and that they are incorrect to shell - used whilst testing functionality.
+                    Username["bg"] = "red"                                                          #Makes entry boxes red to make it apparent to the user that details are incorect
                     Password["bg"] = "red"
 
                 else:
-                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")
-                    print(Username.get(),Password.get(),"User not found")
-                    Username["bg"] = "red"
-                    Password["bg"] = "red"
+                    messagebox.showerror("Failed Login","Your Username or Password was incorrect!")     #If username and password arent correct then error message box is sent to the user.  
+                    print(Username.get(),Password.get(),"User not found")                           #Prints the username and password entered and that they are incorrect to shell - used whilst testing functionality.
+                    Username["bg"] = "red"                                                          #Makes entry boxes red to make it apparent to the user that details are incorect
+                    Password["bg"] = "red"          
 
-    def CancelPress(Username,Password):
-        Username.delete(0, END)
+    def CancelPress(Username,Password):             #Defines the function called when canel button is pressed
+        Username.delete(0, END)                     #Clears the entry boxes if user presses cancel
         Password.delete(0, END)
-        Username["bg"] = "#282828"
+        Username["bg"] = "#282828"                  
         Password["bg"] = "#282828"
 
-    def LoginTab():
+    def LoginTab():                 #Defines Logintab function which makes the entry boxes buttons and outlines the geometry of 'windowLogin'
 
-        def UsernameDel(e):
-            Username.delete(0, END)
+        def UsernameDel(e):             #Once binding action is called (event) then the entrybox will be cleared - in this case it is clicking on the entry box
+            Username.delete(0, END)     #Clears the entrybox username
 
-        def PasswordDel(e):
-            Password.delete(0, END)
+        def PasswordDel(e):             #Once binding action is called (event) then the entrybox will be cleared - in this case it is clicking on the entry box
+            Username.delete(0, END)     #Clears the entrybox password
     
         #windowLogin.geometry('800x600+0+0')
-        width= windowLogin.winfo_screenwidth()               
-        height= windowLogin.winfo_screenheight()               
-        windowLogin.geometry("%dx%d" % (width, height))
-        windowLogin.title("SGQ - Calendar Login")
-        windowLogin["bg"] = "#282828"
+        width= windowLogin.winfo_screenwidth()             #Calculates Screenwidth     
+        height= windowLogin.winfo_screenheight()           #Calculates Screeneheight    
+        windowLogin.geometry("%dx%d" % (width, height))    #Assigns the window geometry to fullscreen
+        windowLogin.title("SGQ - Calendar Login")          #Gives windowLogin and title
+        windowLogin["bg"] = "#282828"                      #Gives windowLogin colour #282828 (Dark grey)
 
-        MainMenu = Menu(windowLogin)
-        windowLogin.config(menu=MainMenu)
+        MainMenu = Menu(windowLogin)                       #Creates Menu on windowLogin
+        windowLogin.config(menu=MainMenu)                  #Configures the Mainmenu to windowLogin
 
-        Option_menu = Menu(MainMenu,tearoff=0)
-        MainMenu.add_cascade(label="Options",menu=Option_menu)
-        Option_menu.add_separator()
-        Option_menu.add_command(label="Exit",command=windowLogin.destroy)
+        Option_menu = Menu(MainMenu,tearoff=0)             #Creates menu 'OptionMenu' into MainMenu and gives it a tearoff of 0
+        MainMenu.add_cascade(label="Options",menu=Option_menu)      #Gives the optionmenu a label to show the user what its for and assigns it to Option_Menu
+        Option_menu.add_separator()                                 #Adds a gap in the menu dropdowns
+        Option_menu.add_command(label="Exit",command=windowLogin.destroy)      #Button labeled Exit which destroys the current window the user is on ('windowLogin')
 
-        Login = PhotoImage(file = "Logo.png")
+        Login = PhotoImage(file = "LoginGUI.png")       #Creates photoimage Login
         label = Label(windowLogin, image=Login)
         label.pack(pady=10)
 
@@ -205,7 +204,7 @@ def DBView():
             conn = sqlite3.connect('SGW_Database.db')
             c = conn.cursor()
 
-            c.execute("SELECT rowid,*FROM bookings WHERE Last_Name=?",(Locate,))
+            c.execute("SELECT rowid,*FROM bookings WHERE Last_Name like?",(Locate,))
             records = c.fetchall()
 
             global count
@@ -480,7 +479,7 @@ def DBAdd():
 
         #Selection colour 
         Style.map('Treeview',
-            background=[('selected','red')])
+            background=[('selected','#203354')])
 
         #Created a Treeview Frame    
         Table_All = Frame(DBAdd_Window)
@@ -782,7 +781,7 @@ def DBDelete():
 
         #Selection colour 
         Style.map('Treeview',
-            background=[('selected','red')])
+            background=[('selected','#203354')])
 
         #Created a Treeview Frame    
         Table_All = Frame(DBDelete_Window)
